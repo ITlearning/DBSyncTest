@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="DBSyncTest" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="동기화된 사진 개수" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LLe-5l-Egt">
+                                <rect key="frame" x="143.5" y="204" width="127" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="동기화 시작 시간 : " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OJY-It-L03">
+                                <rect key="frame" x="144.5" y="233" width="125" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="동기화 완료 시간 :" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cZ-B6-EcY">
+                                <rect key="frame" x="146.5" y="309" width="121" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="갤러리에 들어가있는 사진 개수" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="spK-7s-pWL">
+                                <rect key="frame" x="104.5" y="175" width="205" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="c5F-O8-k3X">
+                                <rect key="frame" x="197" y="270" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6S5-ba-9Tb">
+                                <rect key="frame" x="172" y="518" width="70" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="70" id="gmb-bZ-fa5"/>
+                                    <constraint firstAttribute="height" constant="31" id="tsi-LV-wWq"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="지우기"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="가장최근 동기화 시간 :" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Adg-qy-BBw">
+                                <rect key="frame" x="131.5" y="354" width="151" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hPG-bZ-wnP">
+                                <rect key="frame" x="117" y="557" width="180" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="180" id="6Se-0H-neD"/>
+                                    <constraint firstAttribute="height" constant="40" id="GVO-qH-8Ye"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="전체 데이터 동기화">
+                                    <fontDescription key="titleFontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="14"/>
+                                </buttonConfiguration>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="동기화까지 걸린 시간: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9P6-WF-Frb">
+                                <rect key="frame" x="131.5" y="401" width="151" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="hPG-bZ-wnP" firstAttribute="top" secondItem="6S5-ba-9Tb" secondAttribute="bottom" constant="8" symbolic="YES" id="0E3-dz-0vr"/>
+                            <constraint firstItem="OJY-It-L03" firstAttribute="top" secondItem="LLe-5l-Egt" secondAttribute="bottom" constant="8" symbolic="YES" id="8FB-w4-lZO"/>
+                            <constraint firstItem="c5F-O8-k3X" firstAttribute="top" secondItem="OJY-It-L03" secondAttribute="bottom" constant="16" id="8HT-b4-kRf"/>
+                            <constraint firstItem="9cZ-B6-EcY" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="AGD-1O-w3z"/>
+                            <constraint firstItem="LLe-5l-Egt" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="EY8-AY-dTb"/>
+                            <constraint firstItem="9P6-WF-Frb" firstAttribute="top" secondItem="Adg-qy-BBw" secondAttribute="bottom" constant="26" id="PAG-fQ-ykv"/>
+                            <constraint firstItem="spK-7s-pWL" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="131" id="PfT-hh-6Mf"/>
+                            <constraint firstItem="c5F-O8-k3X" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="197" id="XRk-ic-745"/>
+                            <constraint firstItem="OJY-It-L03" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Ynu-DZ-qdB"/>
+                            <constraint firstItem="LLe-5l-Egt" firstAttribute="top" secondItem="spK-7s-pWL" secondAttribute="bottom" constant="8" symbolic="YES" id="ftU-IZ-Qvp"/>
+                            <constraint firstItem="Adg-qy-BBw" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="hrZ-P3-DVf"/>
+                            <constraint firstItem="6S5-ba-9Tb" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="kKu-1j-yZK"/>
+                            <constraint firstItem="9cZ-B6-EcY" firstAttribute="top" secondItem="c5F-O8-k3X" secondAttribute="bottom" constant="19" id="lOK-1c-rQX"/>
+                            <constraint firstItem="Adg-qy-BBw" firstAttribute="top" secondItem="9cZ-B6-EcY" secondAttribute="bottom" constant="24" id="pB2-xp-G0R"/>
+                            <constraint firstItem="hPG-bZ-wnP" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="puz-bE-wcf"/>
+                            <constraint firstItem="9P6-WF-Frb" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="qML-ZM-UGG"/>
+                            <constraint firstItem="6S5-ba-9Tb" firstAttribute="top" secondItem="9cZ-B6-EcY" secondAttribute="bottom" constant="188" id="qka-xR-uCj"/>
+                            <constraint firstItem="spK-7s-pWL" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="wtX-77-Hjw"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="appDBCntLabel" destination="LLe-5l-Egt" id="6P9-Rx-h0R"/>
+                        <outlet property="circleView" destination="c5F-O8-k3X" id="LX8-0z-d1T"/>
+                        <outlet property="currentUpdateLabel" destination="Adg-qy-BBw" id="lU0-kw-q3S"/>
+                        <outlet property="libraryPhotoCntLabel" destination="spK-7s-pWL" id="ZS7-f9-wFN"/>
+                        <outlet property="reBuildButton" destination="hPG-bZ-wnP" id="CZw-0z-xKu"/>
+                        <outlet property="syncButton" destination="6S5-ba-9Tb" id="RYy-NL-VgA"/>
+                        <outlet property="syncEndDateLabel" destination="9cZ-B6-EcY" id="foL-Z5-wu0"/>
+                        <outlet property="syncMinus" destination="9P6-WF-Frb" id="6Fd-Nw-br3"/>
+                        <outlet property="syncStartDateLabel" destination="OJY-It-L03" id="ri2-r6-GJU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="113.04347826086958" y="69.642857142857139"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

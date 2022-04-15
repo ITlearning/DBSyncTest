@@ -92,11 +92,6 @@ class ViewController: UIViewController {
             }
         }
 
-        // 4. 지우기 로직
-        deleteLogic()
-        // 5. 수정 로직
-        editLogic()
-
         // 6. 큐에 들어간 사진들 돌리기
         perform(#selector(startAction), with: nil, afterDelay: 0.5)
         perform(#selector(delayAction), with: nil, afterDelay: 0.8)
@@ -114,7 +109,7 @@ class ViewController: UIViewController {
     
     
     func deleteLogic() {
-        DispatchQueue.global().sync {
+        DispatchQueue.global(qos: .userInteractive).sync {
             let realm = try! Realm()
             let object = realm.objects(DataBaseModel.self)
             object.forEach { item in
@@ -193,10 +188,10 @@ class ViewController: UIViewController {
     func delayAction() {
         var queueCnt = self.queue.count
         var saveCnt = 0
-        
+        let realm = try! Realm()
         DispatchQueue.global().sync {
             autoreleasepool {
-                let realm = try! Realm()
+                
                 
                 while saveCnt < queueCnt {
                     realm.beginWrite()
@@ -212,8 +207,19 @@ class ViewController: UIViewController {
                     print("\(saveCnt) 개 저장시도")
                     try! realm.commitWrite()
                 }
+                
+                
             }
             
+            // 저장된 개수보다 로드한 이미지의 개수가 더 적을 경우
+            if UserDefaults.standard.integer(forKey: "DBcount") > self.fetchResult.count {
+                // 4. 지우기 로직
+                self.deleteLogic()
+                UserDefaults.standard.set(self.fetchResult.count, forKey: "DBcount")
+            }
+            
+            // 5. 수정 로직
+            self.editLogic()
         }
         
         DispatchQueue.main.async {
@@ -244,11 +250,13 @@ class ViewController: UIViewController {
 
 
     func loadAllPhoto() {
-        let req = PHImageRequestOptions()
-        req.isSynchronous = true
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-        self.fetchResult = PHAsset.fetchAssets(with: fetchOptions)
+        DispatchQueue.global().sync {
+            let req = PHImageRequestOptions()
+            req.isSynchronous = true
+            let fetchOptions = PHFetchOptions()
+            fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+            self.fetchResult = PHAsset.fetchAssets(with: fetchOptions)
+        }
     }
 
 

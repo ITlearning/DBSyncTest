@@ -81,23 +81,38 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WFH-c4-Dab">
+                                <rect key="frame" x="0.0" y="623" width="414" height="190"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pYK-0Y-H69">
+                                <rect key="frame" x="186" y="117" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="hPG-bZ-wnP" firstAttribute="top" secondItem="6S5-ba-9Tb" secondAttribute="bottom" constant="8" symbolic="YES" id="0E3-dz-0vr"/>
+                            <constraint firstItem="pYK-0Y-H69" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="73" id="2rn-D2-Bll"/>
                             <constraint firstItem="OJY-It-L03" firstAttribute="top" secondItem="LLe-5l-Egt" secondAttribute="bottom" constant="8" symbolic="YES" id="8FB-w4-lZO"/>
                             <constraint firstItem="c5F-O8-k3X" firstAttribute="top" secondItem="OJY-It-L03" secondAttribute="bottom" constant="16" id="8HT-b4-kRf"/>
                             <constraint firstItem="9cZ-B6-EcY" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="AGD-1O-w3z"/>
+                            <constraint firstItem="WFH-c4-Dab" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ETe-Fi-wO1"/>
                             <constraint firstItem="LLe-5l-Egt" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="EY8-AY-dTb"/>
                             <constraint firstItem="QT6-JF-cue" firstAttribute="top" secondItem="9P6-WF-Frb" secondAttribute="bottom" constant="37" id="Ixg-2B-ayS"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="WFH-c4-Dab" secondAttribute="bottom" constant="49" id="MAo-54-pLE"/>
                             <constraint firstItem="9P6-WF-Frb" firstAttribute="top" secondItem="Adg-qy-BBw" secondAttribute="bottom" constant="26" id="PAG-fQ-ykv"/>
                             <constraint firstItem="spK-7s-pWL" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="131" id="PfT-hh-6Mf"/>
                             <constraint firstItem="QT6-JF-cue" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Uni-2N-XCL"/>
+                            <constraint firstItem="WFH-c4-Dab" firstAttribute="top" secondItem="hPG-bZ-wnP" secondAttribute="bottom" constant="26" id="VLj-Q4-gmO"/>
                             <constraint firstItem="c5F-O8-k3X" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="197" id="XRk-ic-745"/>
                             <constraint firstItem="OJY-It-L03" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Ynu-DZ-qdB"/>
+                            <constraint firstItem="WFH-c4-Dab" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="fco-GR-vNr"/>
                             <constraint firstItem="LLe-5l-Egt" firstAttribute="top" secondItem="spK-7s-pWL" secondAttribute="bottom" constant="8" symbolic="YES" id="ftU-IZ-Qvp"/>
                             <constraint firstItem="Adg-qy-BBw" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="hrZ-P3-DVf"/>
+                            <constraint firstItem="pYK-0Y-H69" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="jJH-Z5-QxD"/>
                             <constraint firstItem="6S5-ba-9Tb" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="kKu-1j-yZK"/>
                             <constraint firstItem="9cZ-B6-EcY" firstAttribute="top" secondItem="c5F-O8-k3X" secondAttribute="bottom" constant="19" id="lOK-1c-rQX"/>
                             <constraint firstItem="Adg-qy-BBw" firstAttribute="top" secondItem="9cZ-B6-EcY" secondAttribute="bottom" constant="24" id="pB2-xp-G0R"/>
@@ -111,8 +126,10 @@
                         <outlet property="appDBCntLabel" destination="LLe-5l-Egt" id="6P9-Rx-h0R"/>
                         <outlet property="circleView" destination="c5F-O8-k3X" id="LX8-0z-d1T"/>
                         <outlet property="currentUpdateLabel" destination="Adg-qy-BBw" id="lU0-kw-q3S"/>
+                        <outlet property="imageView" destination="WFH-c4-Dab" id="Wcf-UC-zkK"/>
                         <outlet property="libraryPhotoCntLabel" destination="spK-7s-pWL" id="ZS7-f9-wFN"/>
                         <outlet property="locationInfoLabel" destination="QT6-JF-cue" id="wrg-Xn-521"/>
+                        <outlet property="personCntLabel" destination="pYK-0Y-H69" id="4ef-Aa-oOV"/>
                         <outlet property="reBuildButton" destination="hPG-bZ-wnP" id="CZw-0z-xKu"/>
                         <outlet property="syncButton" destination="6S5-ba-9Tb" id="RYy-NL-VgA"/>
                         <outlet property="syncEndDateLabel" destination="9cZ-B6-EcY" id="foL-Z5-wu0"/>

@@ -13,6 +13,7 @@ import Toast
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var personCntLabel: UILabel!
     @IBOutlet weak var locationInfoLabel: UILabel!
     @IBOutlet weak var reBuildButton: UIButton!
     @IBOutlet weak var currentUpdateLabel: UILabel!
@@ -22,8 +23,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var circleView: UIActivityIndicatorView!
     @IBOutlet weak var appDBCntLabel: UILabel!
     @IBOutlet weak var syncMinus: UILabel!
-    
+    private var imageSegmentator: ImageSegmentator?
+    @IBOutlet weak var imageView: UIImageView!
     private var fetchResult = PHFetchResult<PHAsset>()
+    private var segmentationInput: UIImage?
+    private var targetImage: UIImage?
+    
+    /// Image segmentation result.
+    private var segmentationResult: SegmentationResult?
+    
     var dbCnt = 0
     let dispatchQueue = DispatchQueue(label: "serial")
     var startDate = Date()
@@ -36,12 +44,26 @@ class ViewController: UIViewController {
     var notificationToken: NotificationToken?
     var count = 0
     var end = 4000
-
+    var personCount = 0
+    
+    let imagePredictor = ImagePredictor()
     override func viewDidLoad() {
         super.viewDidLoad()
         PHPhotoLibrary.shared().register(self)
         // 버튼 세팅
         configureButton()
+        
+        // Initialize an image segmentator instance.
+        ImageSegmentator.newInstance { result in
+          switch result {
+          case let .success(segmentator):
+            // Store the initialized instance for use.
+            self.imageSegmentator = segmentator
+          case .error(_):
+            print("Failed to initialize.")
+          }
+        }
+        
         // 데이터 전체 세팅
         setAllData()
     }
@@ -107,7 +129,6 @@ extension ViewController {
                     print("\(saveCnt) 개 저장시도")
                     try! realm.commitWrite()
                 }
-                
                 
             }
             DispatchQueue.main.async {
@@ -184,6 +205,37 @@ extension ViewController {
         // 6. 큐에 들어간 사진들 돌리기
         perform(#selector(startAction), with: nil, afterDelay: 0.5)
         perform(#selector(delayAction), with: nil, afterDelay: 0.8)
+        perform(#selector(catchPerson), with: nil, afterDelay: 3)
+    }
+    
+    @objc
+    func catchPerson() {
+        var cnt = 0
+        
+        var queue = Queue<PHAsset>()
+        DispatchQueue.global(qos: .userInteractive).sync {
+            self.fetchResult.enumerateObjects { asset, _, _ in
+                
+                if cnt < 30 {
+                    queue.enqueue(element: asset)
+                    cnt += 1
+                }
+            }
+        }
+        
+        while !queue.isEmpty() {
+            guard let asset = queue.dequeue() else { return }
+            DispatchQueue.global().async {
+                asset.requestContentEditingInput(with: nil) { image, _ in
+                    guard let image = image?.displaySizeImage else { return }
+                    //self.imageView.image = image
+                    self.runSegmentation(image)
+                    print("이미지 넣음")
+                }
+            }
+        }
+        
+        
     }
     
     func add(object: DataBaseModel) {
@@ -445,4 +497,163 @@ extension Date {
         
         return dateFormatter.string(from: date!)
     }
+}
+
+
+extension ViewController {
+    
+    // MARK: Image prediction methods
+    /// Sends a photo to the Image Predictor to get a prediction of its content.
+    /// - Parameter image: A photo.
+    private func classifyImage(_ image: UIImage) {
+        do {
+            try self.imagePredictor.makePredictions(for: image,
+                                                    completionHandler: imagePredictionHandler)
+        } catch {
+            print("Vision was unable to make a prediction...\n\n\(error.localizedDescription)")
+        }
+    }
+    
+    /// The method the Image Predictor calls when its image classifier model generates a prediction.
+    /// - Parameter predictions: An array of predictions.
+    /// - Tag: imagePredictionHandler
+    private func imagePredictionHandler(_ predictions: [ImagePredictor.Prediction]?) {
+        guard let predictions = predictions else {
+            return
+        }
+
+        let formattedPredictions = formatPredictions(predictions)
+
+        let predictionString = formattedPredictions.joined(separator: "\n")
+        print(predictionString)
+        //updatePredictionLabel(predictionString)
+    }
+    
+    /// Converts a prediction's observations into human-readable strings.
+    /// - Parameter observations: The classification observations from a Vision request.
+    /// - Tag: formatPredictions
+    private func formatPredictions(_ predictions: [ImagePredictor.Prediction]) -> [String] {
+        // Vision sorts the classifications in descending confidence order.
+        print("넘어온 것", predictions)
+        let topPredictions: [String] = predictions.map { prediction in
+            var name = prediction.classification
+
+            // For classifications with more than one name, keep the one before the first comma.
+            if let firstComma = name.firstIndex(of: ",") {
+                name = String(name.prefix(upTo: firstComma))
+            }
+
+            return "\(name) - \(prediction.confidencePercentage)%"
+        }
+
+        return topPredictions
+    }
+    
+    func buffer(from image: UIImage) -> CVPixelBuffer? {
+      let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue, kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
+      var pixelBuffer : CVPixelBuffer?
+      let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.size.width), Int(image.size.height), kCVPixelFormatType_32ARGB, attrs, &pixelBuffer)
+      guard (status == kCVReturnSuccess) else {
+        return nil
+      }
+
+      CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+      let pixelData = CVPixelBufferGetBaseAddress(pixelBuffer!)
+
+      let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+      let context = CGContext(data: pixelData, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer!), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)
+
+      context?.translateBy(x: 0, y: image.size.height)
+      context?.scaleBy(x: 1.0, y: -1.0)
+
+      UIGraphicsPushContext(context!)
+      image.draw(in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+      UIGraphicsPopContext()
+      CVPixelBufferUnlockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+
+      return pixelBuffer
+    }
+}
+
+
+extension ViewController {
+    func runSegmentation(_ image: UIImage) {
+      clearResults()
+
+      // Rotate target image to .up orientation to avoid potential orientation misalignment.
+      guard let targetImage = image.transformOrientationToUp() else {
+        return
+      }
+
+      // Make sure that image segmentator is initialized.
+      guard imageSegmentator != nil else {
+        return
+      }
+        self.targetImage = targetImage
+      // Cache the target image.
+
+      // Center-crop the target image if the user has enabled the option.
+      //let image = targetImage.cropCenter()
+
+      // Cache the potentially cropped image as input to the segmentation model.
+      segmentationInput = targetImage
+
+      // Show the potentially cropped image on screen.
+
+      // Make sure that the image is ready before running segmentation.
+      guard targetImage != nil else {
+        return
+      }
+
+      // Run image segmentation.
+      imageSegmentator?.runSegmentation(
+        targetImage,
+        completion: { result in
+          // Unlock the crop switch
+
+          // Show the segmentation result on screen
+          switch result {
+          case let .success(segmentationResult):
+            self.segmentationResult = segmentationResult
+
+            // Show result metadata
+            //self.showInferenceTime(segmentationResult)
+            self.showClassLegend(segmentationResult)
+
+            // Enable switching between different display mode: input, segmentation, overlay
+          case let .error(error):
+              print("에러")
+          }
+        })
+    }
+    
+    /// Show segmentation latency on screen.
+//    private func showInferenceTime(_ segmentationResult: SegmentationResult) {
+//      let timeString = "Preprocessing: \(Int(segmentationResult.preprocessingTime * 1000))ms.\n"
+//        + "Model inference: \(Int(segmentationResult.inferenceTime * 1000))ms.\n"
+//        + "Postprocessing: \(Int(segmentationResult.postProcessingTime * 1000))ms.\n"
+//        + "Visualization: \(Int(segmentationResult.visualizationTime * 1000))ms.\n"
+//
+//      print(timeString)
+//    }
+
+    /// Show color legend of each class found in the image.
+    private func showClassLegend(_ segmentationResult: SegmentationResult) {
+      // Loop through the classes founded in the image.
+        if segmentationResult.colorLegend.contains(where: { $0.key == "person"} ) {
+            
+            DispatchQueue.main.async {
+                self.personCount += 1
+                self.personCntLabel.text = "사람있는 사진 개수: \(self.personCount)"
+            }
+            
+            print("Yes")
+        }
+    }
+    
+    /// Clear result from previous run to prepare for new segmentation run.
+    private func clearResults() {
+      print("Running inference with TensorFlow Lite...")
+    }
+
 }

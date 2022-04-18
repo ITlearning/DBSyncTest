@@ -17,12 +17,31 @@
 		A88783022806CEB100A643F2 /* DataBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88783012806CEB100A643F2 /* DataBaseModel.swift */; };
 		A88783042806CFE900A643F2 /* QueueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88783032806CFE900A643F2 /* QueueModel.swift */; };
 		A88783062806D14E00A643F2 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88783052806D14E00A643F2 /* RealmManager.swift */; };
+		F5BD66DD280D432C00BEA14D /* labelmap.txt in Resources */ = {isa = PBXBuildFile; fileRef = F5BD66DB280D432C00BEA14D /* labelmap.txt */; };
+		F5BD66DE280D432C00BEA14D /* detect.tflite in Resources */ = {isa = PBXBuildFile; fileRef = F5BD66DC280D432C00BEA14D /* detect.tflite */; };
+		F5BD66E1280D43B200BEA14D /* CVPixelBufferExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66E0280D43B200BEA14D /* CVPixelBufferExtension.swift */; };
+		F5BD66E3280D43DF00BEA14D /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66E2280D43DF00BEA14D /* UIColorExtension.swift */; };
+		F5BD66EB280D5A6D00BEA14D /* YOLOv3Int8LUT.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66EA280D5A6D00BEA14D /* YOLOv3Int8LUT.mlmodel */; };
+		F5BD66EF280D5C6700BEA14D /* ImagePredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66EE280D5C6700BEA14D /* ImagePredictor.swift */; };
+		F5BD66F2280D5C8900BEA14D /* CGImagePropertyOrientation+UIImageOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66F0280D5C8900BEA14D /* CGImagePropertyOrientation+UIImageOrientation.swift */; };
+		F5BD66F3280D5C8900BEA14D /* VNClassificationObservation+confidenceString.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66F1280D5C8900BEA14D /* VNClassificationObservation+confidenceString.swift */; };
+		F5BD66F5280D645700BEA14D /* DeepLabV3Int8LUT.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66F4280D645700BEA14D /* DeepLabV3Int8LUT.mlmodel */; };
+		F5BD66F7280D6BE900BEA14D /* ImageSegmentator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66F6280D6BE900BEA14D /* ImageSegmentator.swift */; };
+		F5BD66FA280D6D0100BEA14D /* UIKitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66F8280D6D0100BEA14D /* UIKitExtension.swift */; };
+		F5BD66FB280D6D0100BEA14D /* TFLiteExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66F9280D6D0100BEA14D /* TFLiteExtension.swift */; };
+		F5BD66FE280D6E1B00BEA14D /* deeplabv3_257_mv_gpu.tflite in Resources */ = {isa = PBXBuildFile; fileRef = F5BD66FC280D6E1B00BEA14D /* deeplabv3_257_mv_gpu.tflite */; };
+		F5BD66FF280D6E1B00BEA14D /* deeplabv3_labels.json in Resources */ = {isa = PBXBuildFile; fileRef = F5BD66FD280D6E1B00BEA14D /* deeplabv3_labels.json */; };
+		F5BD6701280D7EB700BEA14D /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD6700280D7EB700BEA14D /* UIImage.swift */; };
 		F5F445272807A5C4003A78C6 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = F5F445262807A5C4003A78C6 /* Realm */; };
 		F5F445292807A5C4003A78C6 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F5F445282807A5C4003A78C6 /* RealmSwift */; };
 		F5F4453228090BAC003A78C6 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = F5F4453128090BAC003A78C6 /* Toast */; };
+		FE45F54CAB7B5EB9908F89DE /* Pods_DBSyncTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1025EA7FC6658BDBC0DF57A0 /* Pods_DBSyncTest.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1025EA7FC6658BDBC0DF57A0 /* Pods_DBSyncTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DBSyncTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B070AE62583CED5CD06E731 /* Pods-DBSyncTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBSyncTest.release.xcconfig"; path = "Target Support Files/Pods-DBSyncTest/Pods-DBSyncTest.release.xcconfig"; sourceTree = "<group>"; };
+		950353D849F93C990C035ADE /* Pods-DBSyncTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DBSyncTest.debug.xcconfig"; path = "Target Support Files/Pods-DBSyncTest/Pods-DBSyncTest.debug.xcconfig"; sourceTree = "<group>"; };
 		A88782E32806C54700A643F2 /* DBSyncTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBSyncTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A88782E62806C54700A643F2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A88782E82806C54700A643F2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,6 +54,21 @@
 		A88783012806CEB100A643F2 /* DataBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseModel.swift; sourceTree = "<group>"; };
 		A88783032806CFE900A643F2 /* QueueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueModel.swift; sourceTree = "<group>"; };
 		A88783052806D14E00A643F2 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		F5BD66DB280D432C00BEA14D /* labelmap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = labelmap.txt; path = ../../../examples/lite/examples/object_detection/ios/ObjectDetection/Model/labelmap.txt; sourceTree = "<group>"; };
+		F5BD66DC280D432C00BEA14D /* detect.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; name = detect.tflite; path = ../../../examples/lite/examples/object_detection/ios/ObjectDetection/Model/detect.tflite; sourceTree = "<group>"; };
+		F5BD66E0280D43B200BEA14D /* CVPixelBufferExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CVPixelBufferExtension.swift; path = ../../../examples/lite/examples/object_detection/ios/ObjectDetection/Extensions/CVPixelBufferExtension.swift; sourceTree = "<group>"; };
+		F5BD66E2280D43DF00BEA14D /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIColorExtension.swift; path = ../../../examples/lite/examples/object_detection/ios/ObjectDetection/Extensions/UIColorExtension.swift; sourceTree = "<group>"; };
+		F5BD66EA280D5A6D00BEA14D /* YOLOv3Int8LUT.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3Int8LUT.mlmodel; sourceTree = "<group>"; };
+		F5BD66EE280D5C6700BEA14D /* ImagePredictor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePredictor.swift; sourceTree = "<group>"; };
+		F5BD66F0280D5C8900BEA14D /* CGImagePropertyOrientation+UIImageOrientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImagePropertyOrientation+UIImageOrientation.swift"; sourceTree = "<group>"; };
+		F5BD66F1280D5C8900BEA14D /* VNClassificationObservation+confidenceString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VNClassificationObservation+confidenceString.swift"; sourceTree = "<group>"; };
+		F5BD66F4280D645700BEA14D /* DeepLabV3Int8LUT.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = DeepLabV3Int8LUT.mlmodel; sourceTree = "<group>"; };
+		F5BD66F6280D6BE900BEA14D /* ImageSegmentator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSegmentator.swift; sourceTree = "<group>"; };
+		F5BD66F8280D6D0100BEA14D /* UIKitExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitExtension.swift; sourceTree = "<group>"; };
+		F5BD66F9280D6D0100BEA14D /* TFLiteExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TFLiteExtension.swift; sourceTree = "<group>"; };
+		F5BD66FC280D6E1B00BEA14D /* deeplabv3_257_mv_gpu.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; path = deeplabv3_257_mv_gpu.tflite; sourceTree = "<group>"; };
+		F5BD66FD280D6E1B00BEA14D /* deeplabv3_labels.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = deeplabv3_labels.json; sourceTree = "<group>"; };
+		F5BD6700280D7EB700BEA14D /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,17 +79,37 @@
 				F5F4453228090BAC003A78C6 /* Toast in Frameworks */,
 				F5F445292807A5C4003A78C6 /* RealmSwift in Frameworks */,
 				F5F445272807A5C4003A78C6 /* Realm in Frameworks */,
+				FE45F54CAB7B5EB9908F89DE /* Pods_DBSyncTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		463872836C377A992A1558F8 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				950353D849F93C990C035ADE /* Pods-DBSyncTest.debug.xcconfig */,
+				5B070AE62583CED5CD06E731 /* Pods-DBSyncTest.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		6048E1342EB5F816D430723C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1025EA7FC6658BDBC0DF57A0 /* Pods_DBSyncTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A88782DA2806C54700A643F2 = {
 			isa = PBXGroup;
 			children = (
 				A88782E52806C54700A643F2 /* DBSyncTest */,
 				A88782E42806C54700A643F2 /* Products */,
+				463872836C377A992A1558F8 /* Pods */,
+				6048E1342EB5F816D430723C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,6 +124,9 @@
 		A88782E52806C54700A643F2 /* DBSyncTest */ = {
 			isa = PBXGroup;
 			children = (
+				F5BD66DF280D43A900BEA14D /* Extension */,
+				F5BD66DA280D432300BEA14D /* Model */,
+				F5BD66EE280D5C6700BEA14D /* ImagePredictor.swift */,
 				A88782FF2806CB6A00A643F2 /* Queue.swift */,
 				A88782E62806C54700A643F2 /* AppDelegate.swift */,
 				A88782E82806C54700A643F2 /* SceneDelegate.swift */,
@@ -81,8 +138,36 @@
 				A88782F12806C54A00A643F2 /* LaunchScreen.storyboard */,
 				A88782F42806C54A00A643F2 /* Info.plist */,
 				A88783032806CFE900A643F2 /* QueueModel.swift */,
+				F5BD66F6280D6BE900BEA14D /* ImageSegmentator.swift */,
 			);
 			path = DBSyncTest;
+			sourceTree = "<group>";
+		};
+		F5BD66DA280D432300BEA14D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F5BD66FC280D6E1B00BEA14D /* deeplabv3_257_mv_gpu.tflite */,
+				F5BD66FD280D6E1B00BEA14D /* deeplabv3_labels.json */,
+				F5BD66F4280D645700BEA14D /* DeepLabV3Int8LUT.mlmodel */,
+				F5BD66EA280D5A6D00BEA14D /* YOLOv3Int8LUT.mlmodel */,
+				F5BD66DC280D432C00BEA14D /* detect.tflite */,
+				F5BD66DB280D432C00BEA14D /* labelmap.txt */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F5BD66DF280D43A900BEA14D /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				F5BD66F9280D6D0100BEA14D /* TFLiteExtension.swift */,
+				F5BD66F8280D6D0100BEA14D /* UIKitExtension.swift */,
+				F5BD66F0280D5C8900BEA14D /* CGImagePropertyOrientation+UIImageOrientation.swift */,
+				F5BD66F1280D5C8900BEA14D /* VNClassificationObservation+confidenceString.swift */,
+				F5BD66E2280D43DF00BEA14D /* UIColorExtension.swift */,
+				F5BD66E0280D43B200BEA14D /* CVPixelBufferExtension.swift */,
+				F5BD6700280D7EB700BEA14D /* UIImage.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -92,6 +177,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A88782F72806C54A00A643F2 /* Build configuration list for PBXNativeTarget "DBSyncTest" */;
 			buildPhases = (
+				5B7B75718B69B7CAEF304966 /* [CP] Check Pods Manifest.lock */,
 				A88782DF2806C54700A643F2 /* Sources */,
 				A88782E02806C54700A643F2 /* Frameworks */,
 				A88782E12806C54700A643F2 /* Resources */,
@@ -152,13 +238,42 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5BD66DD280D432C00BEA14D /* labelmap.txt in Resources */,
 				A88782F32806C54A00A643F2 /* LaunchScreen.storyboard in Resources */,
 				A88782F02806C54A00A643F2 /* Assets.xcassets in Resources */,
 				A88782EE2806C54700A643F2 /* Main.storyboard in Resources */,
+				F5BD66DE280D432C00BEA14D /* detect.tflite in Resources */,
+				F5BD66FE280D6E1B00BEA14D /* deeplabv3_257_mv_gpu.tflite in Resources */,
+				F5BD66FF280D6E1B00BEA14D /* deeplabv3_labels.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5B7B75718B69B7CAEF304966 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DBSyncTest-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A88782DF2806C54700A643F2 /* Sources */ = {
@@ -166,11 +281,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				A88782EB2806C54700A643F2 /* ViewController.swift in Sources */,
+				F5BD66F2280D5C8900BEA14D /* CGImagePropertyOrientation+UIImageOrientation.swift in Sources */,
+				F5BD66FA280D6D0100BEA14D /* UIKitExtension.swift in Sources */,
+				F5BD66FB280D6D0100BEA14D /* TFLiteExtension.swift in Sources */,
 				A88782E72806C54700A643F2 /* AppDelegate.swift in Sources */,
+				F5BD66E1280D43B200BEA14D /* CVPixelBufferExtension.swift in Sources */,
 				A88782E92806C54700A643F2 /* SceneDelegate.swift in Sources */,
+				F5BD66EF280D5C6700BEA14D /* ImagePredictor.swift in Sources */,
+				F5BD66F3280D5C8900BEA14D /* VNClassificationObservation+confidenceString.swift in Sources */,
 				A88783022806CEB100A643F2 /* DataBaseModel.swift in Sources */,
 				A88783002806CB6A00A643F2 /* Queue.swift in Sources */,
+				F5BD66E3280D43DF00BEA14D /* UIColorExtension.swift in Sources */,
+				F5BD66EB280D5A6D00BEA14D /* YOLOv3Int8LUT.mlmodel in Sources */,
 				A88783062806D14E00A643F2 /* RealmManager.swift in Sources */,
+				F5BD66F7280D6BE900BEA14D /* ImageSegmentator.swift in Sources */,
+				F5BD6701280D7EB700BEA14D /* UIImage.swift in Sources */,
+				F5BD66F5280D645700BEA14D /* DeepLabV3Int8LUT.mlmodel in Sources */,
 				A88783042806CFE900A643F2 /* QueueModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -315,6 +441,7 @@
 		};
 		A88782F82806C54A00A643F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 950353D849F93C990C035ADE /* Pods-DBSyncTest.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -345,6 +472,7 @@
 		};
 		A88782F92806C54A00A643F2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5B070AE62583CED5CD06E731 /* Pods-DBSyncTest.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

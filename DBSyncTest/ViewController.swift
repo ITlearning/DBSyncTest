@@ -13,6 +13,7 @@ import Toast
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var locationInfoLabel: UILabel!
     @IBOutlet weak var reBuildButton: UIButton!
     @IBOutlet weak var currentUpdateLabel: UILabel!
     @IBOutlet weak var libraryPhotoCntLabel: UILabel!
@@ -84,6 +85,7 @@ extension ViewController {
     @objc
     func delayAction() {
         var queueCnt = self.queue.count
+        var locationCnt = 0
         var saveCnt = 0
         let realm = try! Realm()
         DispatchQueue.global().sync {
@@ -93,6 +95,9 @@ extension ViewController {
                     for idx in 0..<200 {
                         if !self.queue.isEmpty() {
                             guard let item = self.queue.dequeue() else { return }
+                            if let _ = item.dbModel.location {
+                                locationCnt += 1
+                            }
                             realm.create(DataBaseModel.self, value: writeRealm(item: item.dbModel))
                         } else {
                             break
@@ -105,7 +110,9 @@ extension ViewController {
                 
                 
             }
-            
+            DispatchQueue.main.async {
+                self.locationInfoLabel.text = "위치 정보가 있는 사진 개수 : \(locationCnt) / \(queueCnt)"
+            }
             // 저장된 개수보다 로드한 이미지의 개수가 더 적을 경우
             if UserDefaults.standard.integer(forKey: "DBcount") > self.fetchResult.count {
                 // 4. 지우기 로직

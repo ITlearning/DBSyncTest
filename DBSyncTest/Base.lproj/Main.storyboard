@@ -75,6 +75,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="위치 정보가 있는 사진  개수 :" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QT6-JF-cue">
+                                <rect key="frame" x="110.5" y="459" width="193" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -84,8 +90,10 @@
                             <constraint firstItem="c5F-O8-k3X" firstAttribute="top" secondItem="OJY-It-L03" secondAttribute="bottom" constant="16" id="8HT-b4-kRf"/>
                             <constraint firstItem="9cZ-B6-EcY" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="AGD-1O-w3z"/>
                             <constraint firstItem="LLe-5l-Egt" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="EY8-AY-dTb"/>
+                            <constraint firstItem="QT6-JF-cue" firstAttribute="top" secondItem="9P6-WF-Frb" secondAttribute="bottom" constant="37" id="Ixg-2B-ayS"/>
                             <constraint firstItem="9P6-WF-Frb" firstAttribute="top" secondItem="Adg-qy-BBw" secondAttribute="bottom" constant="26" id="PAG-fQ-ykv"/>
                             <constraint firstItem="spK-7s-pWL" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="131" id="PfT-hh-6Mf"/>
+                            <constraint firstItem="QT6-JF-cue" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Uni-2N-XCL"/>
                             <constraint firstItem="c5F-O8-k3X" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="197" id="XRk-ic-745"/>
                             <constraint firstItem="OJY-It-L03" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Ynu-DZ-qdB"/>
                             <constraint firstItem="LLe-5l-Egt" firstAttribute="top" secondItem="spK-7s-pWL" secondAttribute="bottom" constant="8" symbolic="YES" id="ftU-IZ-Qvp"/>
@@ -104,6 +112,7 @@
                         <outlet property="circleView" destination="c5F-O8-k3X" id="LX8-0z-d1T"/>
                         <outlet property="currentUpdateLabel" destination="Adg-qy-BBw" id="lU0-kw-q3S"/>
                         <outlet property="libraryPhotoCntLabel" destination="spK-7s-pWL" id="ZS7-f9-wFN"/>
+                        <outlet property="locationInfoLabel" destination="QT6-JF-cue" id="wrg-Xn-521"/>
                         <outlet property="reBuildButton" destination="hPG-bZ-wnP" id="CZw-0z-xKu"/>
                         <outlet property="syncButton" destination="6S5-ba-9Tb" id="RYy-NL-VgA"/>
                         <outlet property="syncEndDateLabel" destination="9cZ-B6-EcY" id="foL-Z5-wu0"/>

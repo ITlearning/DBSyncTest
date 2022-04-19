@@ -17,6 +17,7 @@
 		A88783022806CEB100A643F2 /* DataBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88783012806CEB100A643F2 /* DataBaseModel.swift */; };
 		A88783042806CFE900A643F2 /* QueueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88783032806CFE900A643F2 /* QueueModel.swift */; };
 		A88783062806D14E00A643F2 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88783052806D14E00A643F2 /* RealmManager.swift */; };
+		F555602C280E43F700F94F65 /* SegInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F555602B280E43F700F94F65 /* SegInfo.swift */; };
 		F5BD66DD280D432C00BEA14D /* labelmap.txt in Resources */ = {isa = PBXBuildFile; fileRef = F5BD66DB280D432C00BEA14D /* labelmap.txt */; };
 		F5BD66DE280D432C00BEA14D /* detect.tflite in Resources */ = {isa = PBXBuildFile; fileRef = F5BD66DC280D432C00BEA14D /* detect.tflite */; };
 		F5BD66E1280D43B200BEA14D /* CVPixelBufferExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66E0280D43B200BEA14D /* CVPixelBufferExtension.swift */; };
@@ -54,6 +55,7 @@
 		A88783012806CEB100A643F2 /* DataBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBaseModel.swift; sourceTree = "<group>"; };
 		A88783032806CFE900A643F2 /* QueueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueModel.swift; sourceTree = "<group>"; };
 		A88783052806D14E00A643F2 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		F555602B280E43F700F94F65 /* SegInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegInfo.swift; sourceTree = "<group>"; };
 		F5BD66DB280D432C00BEA14D /* labelmap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = labelmap.txt; path = ../../../examples/lite/examples/object_detection/ios/ObjectDetection/Model/labelmap.txt; sourceTree = "<group>"; };
 		F5BD66DC280D432C00BEA14D /* detect.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; name = detect.tflite; path = ../../../examples/lite/examples/object_detection/ios/ObjectDetection/Model/detect.tflite; sourceTree = "<group>"; };
 		F5BD66E0280D43B200BEA14D /* CVPixelBufferExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CVPixelBufferExtension.swift; path = ../../../examples/lite/examples/object_detection/ios/ObjectDetection/Extensions/CVPixelBufferExtension.swift; sourceTree = "<group>"; };
@@ -124,34 +126,67 @@
 		A88782E52806C54700A643F2 /* DBSyncTest */ = {
 			isa = PBXGroup;
 			children = (
+				F5556030280E519100F94F65 /* Queue */,
+				F555602F280E517C00F94F65 /* Management */,
+				F555602E280E517200F94F65 /* TableView */,
+				F555602D280E515100F94F65 /* ViewController */,
 				F5BD66DF280D43A900BEA14D /* Extension */,
 				F5BD66DA280D432300BEA14D /* Model */,
-				F5BD66EE280D5C6700BEA14D /* ImagePredictor.swift */,
-				A88782FF2806CB6A00A643F2 /* Queue.swift */,
 				A88782E62806C54700A643F2 /* AppDelegate.swift */,
 				A88782E82806C54700A643F2 /* SceneDelegate.swift */,
-				A88782EA2806C54700A643F2 /* ViewController.swift */,
-				A88783052806D14E00A643F2 /* RealmManager.swift */,
-				A88783012806CEB100A643F2 /* DataBaseModel.swift */,
 				A88782EC2806C54700A643F2 /* Main.storyboard */,
 				A88782EF2806C54A00A643F2 /* Assets.xcassets */,
 				A88782F12806C54A00A643F2 /* LaunchScreen.storyboard */,
 				A88782F42806C54A00A643F2 /* Info.plist */,
-				A88783032806CFE900A643F2 /* QueueModel.swift */,
-				F5BD66F6280D6BE900BEA14D /* ImageSegmentator.swift */,
 			);
 			path = DBSyncTest;
+			sourceTree = "<group>";
+		};
+		F555602D280E515100F94F65 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A88782EA2806C54700A643F2 /* ViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		F555602E280E517200F94F65 /* TableView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TableView;
+			sourceTree = "<group>";
+		};
+		F555602F280E517C00F94F65 /* Management */ = {
+			isa = PBXGroup;
+			children = (
+				F5BD66EE280D5C6700BEA14D /* ImagePredictor.swift */,
+				A88783052806D14E00A643F2 /* RealmManager.swift */,
+				F5BD66F6280D6BE900BEA14D /* ImageSegmentator.swift */,
+			);
+			path = Management;
+			sourceTree = "<group>";
+		};
+		F5556030280E519100F94F65 /* Queue */ = {
+			isa = PBXGroup;
+			children = (
+				A88782FF2806CB6A00A643F2 /* Queue.swift */,
+				A88783032806CFE900A643F2 /* QueueModel.swift */,
+			);
+			path = Queue;
 			sourceTree = "<group>";
 		};
 		F5BD66DA280D432300BEA14D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A88783012806CEB100A643F2 /* DataBaseModel.swift */,
 				F5BD66FC280D6E1B00BEA14D /* deeplabv3_257_mv_gpu.tflite */,
 				F5BD66FD280D6E1B00BEA14D /* deeplabv3_labels.json */,
 				F5BD66F4280D645700BEA14D /* DeepLabV3Int8LUT.mlmodel */,
 				F5BD66EA280D5A6D00BEA14D /* YOLOv3Int8LUT.mlmodel */,
 				F5BD66DC280D432C00BEA14D /* detect.tflite */,
 				F5BD66DB280D432C00BEA14D /* labelmap.txt */,
+				F555602B280E43F700F94F65 /* SegInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -286,6 +321,7 @@
 				F5BD66FB280D6D0100BEA14D /* TFLiteExtension.swift in Sources */,
 				A88782E72806C54700A643F2 /* AppDelegate.swift in Sources */,
 				F5BD66E1280D43B200BEA14D /* CVPixelBufferExtension.swift in Sources */,
+				F555602C280E43F700F94F65 /* SegInfo.swift in Sources */,
 				A88782E92806C54700A643F2 /* SceneDelegate.swift in Sources */,
 				F5BD66EF280D5C6700BEA14D /* ImagePredictor.swift in Sources */,
 				F5BD66F3280D5C8900BEA14D /* VNClassificationObservation+confidenceString.swift in Sources */,

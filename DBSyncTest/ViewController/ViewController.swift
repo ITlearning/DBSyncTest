@@ -13,6 +13,9 @@ import Toast
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var scanStopButton: UIButton!
+    @IBOutlet weak var scanStartButton: UIButton!
+    @IBOutlet weak var notScanPersonLabel: UILabel!
     @IBOutlet weak var personCntLabel: UILabel!
     @IBOutlet weak var locationInfoLabel: UILabel!
     @IBOutlet weak var reBuildButton: UIButton!
@@ -24,11 +27,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var appDBCntLabel: UILabel!
     @IBOutlet weak var syncMinus: UILabel!
     private var imageSegmentator: ImageSegmentator?
-    @IBOutlet weak var imageView: UIImageView!
+    private var resetBool: Bool = false
     private var fetchResult = PHFetchResult<PHAsset>()
     private var segmentationInput: UIImage?
     private var targetImage: UIImage?
-    
+    private var segmentationInfo: [SegInfo] = []
+    var classifierQueue = Queue<PHAsset>()
     /// Image segmentation result.
     private var segmentationResult: SegmentationResult?
     
@@ -45,16 +49,15 @@ class ViewController: UIViewController {
     var count = 0
     var end = 4000
     var personCount = 0
-    
-    let imagePredictor = ImagePredictor()
+    public var globalTimer = Timer()
     override func viewDidLoad() {
         super.viewDidLoad()
         PHPhotoLibrary.shared().register(self)
         // 버튼 세팅
         configureButton()
-        
         // Initialize an image segmentator instance.
-        ImageSegmentator.newInstance { result in
+        ImageSegmentator.newInstance { [weak self] result in
+            guard let self = self else { return }
           switch result {
           case let .success(segmentator):
             // Store the initialized instance for use.
@@ -68,9 +71,15 @@ class ViewController: UIViewController {
         setAllData()
     }
 
+    func setTimer() {
+        self.globalTimer = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(checkCPU), userInfo: nil, repeats: true)
+    }
+    
     func configureButton() {
         syncButton.addTarget(self, action: #selector(syncAction), for: .touchUpInside)
         reBuildButton.addTarget(self, action: #selector(reBuildAction), for: .touchUpInside)
+        scanStartButton.addTarget(self, action: #selector(scanStartAction), for: .touchUpInside)
+        scanStopButton.addTarget(self, action: #selector(scanStopAction), for: .touchUpInside)
     }
     
     deinit {
@@ -79,12 +88,125 @@ class ViewController: UIViewController {
 
 }
 
+extension ViewController {
+    
+    static var memortUsage: Double {
+        var taskInfo = task_vm_info_data_t()
+        var count = mach_msg_type_number_t(MemoryLayout<task_vm_info>.size) / 4
+        
+        let result: kern_return_t = withUnsafeMutablePointer(to: &taskInfo) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                task_info(mach_task_self_, task_flavor_t(TASK_VM_INFO), $0, &count)
+            }
+        }
+        
+        var used: UInt64 = 0
+        if result == KERN_SUCCESS { used = UInt64(taskInfo.phys_footprint) }
+        
+        let total = ProcessInfo.processInfo.physicalMemory
+        let bytesInMegabyte = 1024.0 * 1024.0
+        let usedMemory: Double = Double(used) / bytesInMegabyte
+        let totalMemory: Double = Double(total) / bytesInMegabyte
+        print(String(format: "%.2f MB / %.0f MB", usedMemory, totalMemory))
+        return usedMemory
+    }
+    
+    static var cpuUsage: Double {
+        var totalUsageOfCPU: Double = 0.0
+        var threadsList: thread_act_array_t?
+        var threadsCount = mach_msg_type_number_t(0)
+        let threadsResult = withUnsafeMutablePointer(to: &threadsList) {
+            return $0.withMemoryRebound(to: thread_act_array_t?.self, capacity: 1) {
+                task_threads(mach_task_self_, $0, &threadsCount)
+            }
+        }
+        
+        if threadsResult == KERN_SUCCESS, let threadsList = threadsList {
+            for index in 0..<threadsCount {
+                var threadInfo = thread_basic_info()
+                var threadInfoCount = mach_msg_type_number_t(THREAD_INFO_MAX)
+                let infoResult = withUnsafeMutablePointer(to: &threadInfo) {
+                    $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                        thread_info(threadsList[Int(index)],
+                                    thread_flavor_t(THREAD_BASIC_INFO),
+                                    $0,
+                                    &threadInfoCount)
+                    }
+                }
+                
+                guard infoResult == KERN_SUCCESS else { break }
+                
+                let threadBasicInfo = threadInfo as thread_basic_info
+                if threadBasicInfo.flags & TH_FLAGS_IDLE == 0 {
+                    totalUsageOfCPU = (totalUsageOfCPU + (Double(threadBasicInfo.cpu_usage) / Double(TH_USAGE_SCALE) * 100.0))
+                    
+                }
+            }
+        }
+        
+        vm_deallocate(mach_task_self_, vm_address_t(UInt(bitPattern: threadsList)), vm_size_t(Int(threadsCount) * MemoryLayout<thread_t>.stride))
+        print(String(format: "CPU: %.1f", totalUsageOfCPU))
+        return totalUsageOfCPU
+    }
+    
+    func hostCPULoadInfo() -> host_cpu_load_info? {
+        let HOST_CPU_LOAD_INFO_COUNT = MemoryLayout<host_cpu_load_info>.stride/MemoryLayout<integer_t>.stride
+        var size = mach_msg_type_number_t(HOST_CPU_LOAD_INFO_COUNT)
+        var cpuLoadInfo = host_cpu_load_info()
+
+        let result = withUnsafeMutablePointer(to: &cpuLoadInfo) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: HOST_CPU_LOAD_INFO_COUNT) {
+                host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO, $0, &size)
+            }
+        }
+        if result != KERN_SUCCESS{
+            print("Error  - \(#file): \(#function) - kern_result_t = \(result)")
+            return nil
+        }
+        return cpuLoadInfo
+    }
+}
+
 
 // MARK: - objc Functions
 extension ViewController {
     
     @objc
+    func scanStopAction() {
+        self.globalTimer.invalidate()
+    }
+    
+    @objc
+    func scanStartAction() {
+        self.globalTimer = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(checkCPU), userInfo: nil, repeats: true)
+    }
+    
+    @objc
+    func checkCPU() {
+        
+        if ViewController.cpuUsage < 30.0 {
+            if !self.classifierQueue.isEmpty() {
+                guard let asset = self.classifierQueue.dequeue() else { return }
+                DispatchQueue.global().async {
+                    asset.requestContentEditingInput(with: nil) { image, _ in
+                        guard let image = image?.displaySizeImage else { return }
+                        //self.imageView.image = image
+                        self.runSegmentation(image, asset: asset)
+                        
+                        print("이미지 넣음")
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.notScanPersonLabel.text = "사람 파악 남은 사진 수 : \(self.classifierQueue.count)"
+                }
+                UserDefaults.standard.set(self.classifierQueue.count, forKey: "ClassifierCnt")
+            }
+        }
+    }
+    
+    @objc
     func reBuildAction() {
+        resetBool = true
         setAllData()
     }
     
@@ -172,7 +294,7 @@ extension ViewController {
 extension ViewController {
     
     func setAllData() {
-        
+        self.classifierQueue.clear()
         DispatchQueue.main.async {
             self.currentUpdateLabel.text = "가장최근 동기화 시간:"
             self.libraryPhotoCntLabel.text = "갤러리에 들어가있는 사진 개수:"
@@ -190,15 +312,45 @@ extension ViewController {
 
         // 3. 가져온 사진 큐에 넣기
         DispatchQueue.global().sync {
+            
             self.fetchResult.enumerateObjects { asset, _, _ in
+                self.classifierQueue.enqueue(element: asset)
                 let realm = try! Realm()
                 if let _ = realm.objects(DataBaseModel.self).filter("id == '\(asset.localIdentifier)'").first {
                 } else {
                     let item = QueueModel(dbModel: asset, queueType: .add)
                     self.queue.enqueue(element: item)
+                    
                 }
 
                 //self.count += 1
+            }
+            
+            if resetBool {
+                UserDefaults.standard.set(self.classifierQueue.count, forKey: "ClassifierCnt")
+                print("세팅", self.classifierQueue.count)
+                resetBool = false
+            }
+            
+            print("마지막 업데이트 할 때 큐에 남아있던 개수", UserDefaults.standard.integer(forKey: "ClassifierCnt"))
+            
+            if UserDefaults.standard.integer(forKey: "ClassifierCnt") != 0 {
+                while classifierQueue.count > UserDefaults.standard.integer(forKey: "ClassifierCnt") {
+                    let _ = classifierQueue.dequeue()
+                }
+            }
+            
+            print("큐에 남아있는 개수", classifierQueue.count)
+        }
+        
+        DispatchQueue.global().sync {
+            do {
+                let realm = try Realm()
+                let count = realm.objects(DataBaseModel.self).filter("includedPerson == true").count
+                personCount = count
+                print("DB에 저장된 사람 수 ",count)
+            } catch {
+                print("에러~")
             }
         }
 
@@ -210,32 +362,7 @@ extension ViewController {
     
     @objc
     func catchPerson() {
-        var cnt = 0
-        
-        var queue = Queue<PHAsset>()
-        DispatchQueue.global(qos: .userInteractive).sync {
-            self.fetchResult.enumerateObjects { asset, _, _ in
-                
-                if cnt < 30 {
-                    queue.enqueue(element: asset)
-                    cnt += 1
-                }
-            }
-        }
-        
-        while !queue.isEmpty() {
-            guard let asset = queue.dequeue() else { return }
-            DispatchQueue.global().async {
-                asset.requestContentEditingInput(with: nil) { image, _ in
-                    guard let image = image?.displaySizeImage else { return }
-                    //self.imageView.image = image
-                    self.runSegmentation(image)
-                    print("이미지 넣음")
-                }
-            }
-        }
-        
-        
+        setTimer()
     }
     
     func add(object: DataBaseModel) {
@@ -340,7 +467,7 @@ extension ViewController {
         data.isUpload = 0
         data.localUpdatedAt = Date().dateToString(date: Date()) ?? ""
         data.modificationDate = Date().dateToString(date: item.modificationDate) ?? ""
-
+        data.includedPerson = false
         return data
     }
     
@@ -499,85 +626,8 @@ extension Date {
     }
 }
 
-
 extension ViewController {
-    
-    // MARK: Image prediction methods
-    /// Sends a photo to the Image Predictor to get a prediction of its content.
-    /// - Parameter image: A photo.
-    private func classifyImage(_ image: UIImage) {
-        do {
-            try self.imagePredictor.makePredictions(for: image,
-                                                    completionHandler: imagePredictionHandler)
-        } catch {
-            print("Vision was unable to make a prediction...\n\n\(error.localizedDescription)")
-        }
-    }
-    
-    /// The method the Image Predictor calls when its image classifier model generates a prediction.
-    /// - Parameter predictions: An array of predictions.
-    /// - Tag: imagePredictionHandler
-    private func imagePredictionHandler(_ predictions: [ImagePredictor.Prediction]?) {
-        guard let predictions = predictions else {
-            return
-        }
-
-        let formattedPredictions = formatPredictions(predictions)
-
-        let predictionString = formattedPredictions.joined(separator: "\n")
-        print(predictionString)
-        //updatePredictionLabel(predictionString)
-    }
-    
-    /// Converts a prediction's observations into human-readable strings.
-    /// - Parameter observations: The classification observations from a Vision request.
-    /// - Tag: formatPredictions
-    private func formatPredictions(_ predictions: [ImagePredictor.Prediction]) -> [String] {
-        // Vision sorts the classifications in descending confidence order.
-        print("넘어온 것", predictions)
-        let topPredictions: [String] = predictions.map { prediction in
-            var name = prediction.classification
-
-            // For classifications with more than one name, keep the one before the first comma.
-            if let firstComma = name.firstIndex(of: ",") {
-                name = String(name.prefix(upTo: firstComma))
-            }
-
-            return "\(name) - \(prediction.confidencePercentage)%"
-        }
-
-        return topPredictions
-    }
-    
-    func buffer(from image: UIImage) -> CVPixelBuffer? {
-      let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue, kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
-      var pixelBuffer : CVPixelBuffer?
-      let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.size.width), Int(image.size.height), kCVPixelFormatType_32ARGB, attrs, &pixelBuffer)
-      guard (status == kCVReturnSuccess) else {
-        return nil
-      }
-
-      CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
-      let pixelData = CVPixelBufferGetBaseAddress(pixelBuffer!)
-
-      let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-      let context = CGContext(data: pixelData, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer!), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)
-
-      context?.translateBy(x: 0, y: image.size.height)
-      context?.scaleBy(x: 1.0, y: -1.0)
-
-      UIGraphicsPushContext(context!)
-      image.draw(in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
-      UIGraphicsPopContext()
-      CVPixelBufferUnlockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
-
-      return pixelBuffer
-    }
-}
-
-
-extension ViewController {
-    func runSegmentation(_ image: UIImage) {
+    func runSegmentation(_ image: UIImage, asset: PHAsset) {
       clearResults()
 
       // Rotate target image to .up orientation to avoid potential orientation misalignment.
@@ -617,8 +667,7 @@ extension ViewController {
             self.segmentationResult = segmentationResult
 
             // Show result metadata
-            //self.showInferenceTime(segmentationResult)
-            self.showClassLegend(segmentationResult)
+              self.showClassLegend(segmentationResult, asset: asset)
 
             // Enable switching between different display mode: input, segmentation, overlay
           case let .error(error):
@@ -626,25 +675,38 @@ extension ViewController {
           }
         })
     }
-    
-    /// Show segmentation latency on screen.
-//    private func showInferenceTime(_ segmentationResult: SegmentationResult) {
-//      let timeString = "Preprocessing: \(Int(segmentationResult.preprocessingTime * 1000))ms.\n"
-//        + "Model inference: \(Int(segmentationResult.inferenceTime * 1000))ms.\n"
-//        + "Postprocessing: \(Int(segmentationResult.postProcessingTime * 1000))ms.\n"
-//        + "Visualization: \(Int(segmentationResult.visualizationTime * 1000))ms.\n"
-//
-//      print(timeString)
-//    }
 
     /// Show color legend of each class found in the image.
-    private func showClassLegend(_ segmentationResult: SegmentationResult) {
+    private func showClassLegend(_ segmentationResult: SegmentationResult, asset: PHAsset) {
       // Loop through the classes founded in the image.
+        
+        var seg = SegInfo(preprocessing: Int(segmentationResult.preprocessingTime * 1000),
+                          modelInference: Int(segmentationResult.inferenceTime * 1000),
+                          postprocessing: Int(segmentationResult.postProcessingTime * 1000),
+                          visualization: Int(segmentationResult.visualizationTime * 1000), isPerson: true)
+        
         if segmentationResult.colorLegend.contains(where: { $0.key == "person"} ) {
             
             DispatchQueue.main.async {
                 self.personCount += 1
                 self.personCntLabel.text = "사람있는 사진 개수: \(self.personCount)"
+            }
+            
+            seg.isPerson = false
+            do {
+                let realm = try Realm()
+                let object = realm.objects(DataBaseModel.self)
+                if let data = object.filter("id == '\(asset.localIdentifier)'").first {
+                    try realm.write {
+                        data.includedPerson = true
+                    }
+                    DispatchQueue.main.async {
+                        self.currentUpdateLabel.text = "가장최근 동기화 시간: \(Date().dateToStringNormal(date: Date()))"
+                    }
+                    print("✅ 사람 여부 수정 완료")
+                }
+            } catch {
+                print("Person")
             }
             
             print("Yes")

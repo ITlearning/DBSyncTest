@@ -22,4 +22,5 @@ class DataBaseModel: Object {
     @Persisted var localUpdatedAt: String    // 테이블에 업데이트 된 일시
     @Persisted var editedAt: String?         // 사진 수정일시(ISO-8601)
     @Persisted var modificationDate: String? // 마지막 수정일시(ISO-8601)
+    @Persisted var includedPerson: Bool      // 사람 포함 여부
 }

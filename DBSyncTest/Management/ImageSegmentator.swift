@@ -197,7 +197,7 @@ class ImageSegmentator {
 
       do {
         // Preprocessing: Resize the input UIImage to match with TF Lite model input shape.
-          let image = image.downSample1(scale: 0.5)
+          let image = image.downSample1(scale: 0.4)
         guard
           let rgbData = image.scaledData(
             with: CGSize(width: self.inputImageWidth, height: self.inputImageHeight),

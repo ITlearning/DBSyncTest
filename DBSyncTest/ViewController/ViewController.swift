@@ -185,6 +185,12 @@ extension ViewController {
     func checkCPU() {
         
         if ViewController.cpuUsage < 30.0 {
+//            DispatchQueue.global().async {
+//                //self.imageView.image = image
+//                self.runSegmentation(UIImage(named: "test")!, asset: PHAsset())
+//                print("이미지 넣음")
+//            }
+            
             if !self.classifierQueue.isEmpty() {
                 guard let asset = self.classifierQueue.dequeue() else { return }
                 DispatchQueue.global().async {
@@ -192,7 +198,7 @@ extension ViewController {
                         guard let image = image?.displaySizeImage else { return }
                         //self.imageView.image = image
                         self.runSegmentation(image, asset: asset)
-                        
+
                         print("이미지 넣음")
                     }
                 }
@@ -686,6 +692,8 @@ extension ViewController {
                           visualization: Int(segmentationResult.visualizationTime * 1000), isPerson: true)
         
         if segmentationResult.colorLegend.contains(where: { $0.key == "person"} ) {
+            
+            print("사람임",segmentationResult.colorLegend)
             
             DispatchQueue.main.async {
                 self.personCount += 1

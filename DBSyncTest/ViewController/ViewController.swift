@@ -35,7 +35,9 @@ class ViewController: UIViewController {
     var classifierQueue = Queue<PHAsset>()
     /// Image segmentation result.
     private var segmentationResult: SegmentationResult?
+    @IBOutlet weak var collectionView: UICollectionView!
     
+    private var assetIds: [String] = []
     var dbCnt = 0
     let dispatchQueue = DispatchQueue(label: "serial")
     var startDate = Date()
@@ -50,11 +52,15 @@ class ViewController: UIViewController {
     var end = 4000
     var personCount = 0
     public var globalTimer = Timer()
+    
+    // MARK: - ViewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
         PHPhotoLibrary.shared().register(self)
+        
         // 버튼 세팅
         configureButton()
+        
         // Initialize an image segmentator instance.
         ImageSegmentator.newInstance { [weak self] result in
             guard let self = self else { return }
@@ -67,8 +73,16 @@ class ViewController: UIViewController {
           }
         }
         
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 1
+        flowLayout.minimumInteritemSpacing = 1
+        flowLayout.itemSize = CGSize(width: (UIScreen.main.bounds.width / 3) - 5, height: UIScreen.main.bounds.width / 3)
+        collectionView.collectionViewLayout = flowLayout
         // 데이터 전체 세팅
-        setAllData()
+        self.setAllData()
+
     }
 
     func setTimer() {
@@ -183,29 +197,32 @@ extension ViewController {
     
     @objc
     func checkCPU() {
-        
-        if ViewController.cpuUsage < 30.0 {
-//            DispatchQueue.global().async {
-//                //self.imageView.image = image
-//                self.runSegmentation(UIImage(named: "test")!, asset: PHAsset())
-//                print("이미지 넣음")
-//            }
-            
+        print("다시 들어옴?")
+        if ViewController.cpuUsage < 100 && ViewController.memortUsage < 300.0 {
             if !self.classifierQueue.isEmpty() {
+                
+                DispatchQueue.main.async {
+                    self.notScanPersonLabel.text = "사람 파악 남은 사진 수 : \(self.classifierQueue.count+1)"
+                }
+                
                 guard let asset = self.classifierQueue.dequeue() else { return }
                 DispatchQueue.global().async {
                     asset.requestContentEditingInput(with: nil) { image, _ in
                         guard let image = image?.displaySizeImage else { return }
                         //self.imageView.image = image
                         self.runSegmentation(image, asset: asset)
-
+                        
                         print("이미지 넣음")
                     }
                 }
-                DispatchQueue.main.async {
-                    self.notScanPersonLabel.text = "사람 파악 남은 사진 수 : \(self.classifierQueue.count)"
-                }
+                
+                UserDefaults.standard.set(asset.creationDate, forKey: "lastUpdate")
                 UserDefaults.standard.set(self.classifierQueue.count, forKey: "ClassifierCnt")
+            } else {
+                DispatchQueue.main.async {
+                    self.notScanPersonLabel.text = "사람 파악 남은 사진 수 : 0"
+                    self.globalTimer.invalidate()
+                }
             }
         }
     }
@@ -213,6 +230,9 @@ extension ViewController {
     @objc
     func reBuildAction() {
         resetBool = true
+        assetIds.removeAll()
+        UserDefaults.standard.removeObject(forKey: "lastUpdate")
+        collectionView.reloadData()
         setAllData()
     }
     
@@ -259,14 +279,19 @@ extension ViewController {
                 }
                 
             }
-            DispatchQueue.main.async {
-                self.locationInfoLabel.text = "위치 정보가 있는 사진 개수 : \(locationCnt) / \(queueCnt)"
-            }
+            
             // 저장된 개수보다 로드한 이미지의 개수가 더 적을 경우
-            if UserDefaults.standard.integer(forKey: "DBcount") > self.fetchResult.count {
+            if UserDefaults.standard.integer(forKey: "DBcount") >= self.fetchResult.count {
                 // 4. 지우기 로직
                 self.deleteLogic()
                 UserDefaults.standard.set(self.fetchResult.count, forKey: "DBcount")
+            }
+            
+            let object = realm.objects(DataBaseModel.self)
+            let items = object.filter("lat != 0.0")
+            
+            DispatchQueue.main.async {
+                self.locationInfoLabel.text = "위치 정보가 있는 사진 개수 : \(items.count) / \(object.count)"
             }
             
             // 5. 수정 로직
@@ -315,12 +340,28 @@ extension ViewController {
         DispatchQueue.main.async {
             self.libraryPhotoCntLabel.text = "갤러리에 들어가있는 사진 개수 \(self.fetchResult.count) 개"
         }
-
         // 3. 가져온 사진 큐에 넣기
         DispatchQueue.global().sync {
             
+            if let _ = UserDefaults.standard.object(forKey: "lastUpdate") as? Date {
+                let options = PHFetchOptions()
+                options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+                options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+                
+                let image = PHAsset.fetchAssets(with: options)
+
+                image.enumerateObjects { asset, _, _ in
+                    if (asset.creationDate!) as Date > UserDefaults.standard.object(forKey: "lastUpdate") as! Date {
+                        self.classifierQueue.enqueue(element: asset)
+                    }
+                }
+            } else {
+                self.fetchResult.enumerateObjects { asset, _, _ in
+                    self.classifierQueue.enqueue(element: asset)
+                }
+            }
+            
             self.fetchResult.enumerateObjects { asset, _, _ in
-                self.classifierQueue.enqueue(element: asset)
                 let realm = try! Realm()
                 if let _ = realm.objects(DataBaseModel.self).filter("id == '\(asset.localIdentifier)'").first {
                 } else {
@@ -328,32 +369,22 @@ extension ViewController {
                     self.queue.enqueue(element: item)
                     
                 }
-
-                //self.count += 1
             }
-            
-            if resetBool {
-                UserDefaults.standard.set(self.classifierQueue.count, forKey: "ClassifierCnt")
-                print("세팅", self.classifierQueue.count)
-                resetBool = false
-            }
-            
-            print("마지막 업데이트 할 때 큐에 남아있던 개수", UserDefaults.standard.integer(forKey: "ClassifierCnt"))
-            
-            if UserDefaults.standard.integer(forKey: "ClassifierCnt") != 0 {
-                while classifierQueue.count > UserDefaults.standard.integer(forKey: "ClassifierCnt") {
-                    let _ = classifierQueue.dequeue()
-                }
-            }
-            
-            print("큐에 남아있는 개수", classifierQueue.count)
         }
         
         DispatchQueue.global().sync {
             do {
                 let realm = try Realm()
-                let count = realm.objects(DataBaseModel.self).filter("includedPerson == true").count
-                personCount = count
+                let object = realm.objects(DataBaseModel.self).filter("includedPerson == true")
+                object.forEach { item in
+                    assetIds.append(item.id)
+                }
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                    self.personCntLabel.text = "사람있는 사진 개수: \(self.personCount)"
+                }
+                personCount = object.count
+                
                 print("DB에 저장된 사람 수 ",count)
             } catch {
                 print("에러~")
@@ -363,7 +394,7 @@ extension ViewController {
         // 6. 큐에 들어간 사진들 돌리기
         perform(#selector(startAction), with: nil, afterDelay: 0.5)
         perform(#selector(delayAction), with: nil, afterDelay: 0.8)
-        perform(#selector(catchPerson), with: nil, afterDelay: 3)
+        perform(#selector(catchPerson), with: nil, afterDelay: 2)
     }
     
     @objc
@@ -484,6 +515,7 @@ extension ViewController {
             req.isSynchronous = true
             let fetchOptions = PHFetchOptions()
             fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+            fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
             self.fetchResult = PHAsset.fetchAssets(with: fetchOptions)
         }
     }
@@ -561,7 +593,7 @@ extension ViewController: PHPhotoLibraryChangeObserver {
         self.changeAssets.removeAll()
         
         guard let changeDetail = changeInstance.changeDetails(for: fetchResult) else { return }
-
+        
         let deleteAssets = changeDetail.removedObjects
         let addAssets = changeDetail.insertedObjects
         let changeAssets = changeDetail.changedObjects
@@ -569,8 +601,16 @@ extension ViewController: PHPhotoLibraryChangeObserver {
         if !addAssets.isEmpty {
 
             addAssets.forEach { asset in
+                DispatchQueue.main.async {
+                    self.classifierQueue.enqueue(element: asset)
+                }
+
                 let data = self.writeRealm(item: asset)
                 add(object: data)
+            }
+            
+            DispatchQueue.main.async {
+                self.globalTimer = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(self.checkCPU), userInfo: nil, repeats: true)
             }
         }
 
@@ -693,11 +733,14 @@ extension ViewController {
         
         if segmentationResult.colorLegend.contains(where: { $0.key == "person"} ) {
             
-            print("사람임",segmentationResult.colorLegend)
-            
             DispatchQueue.main.async {
                 self.personCount += 1
                 self.personCntLabel.text = "사람있는 사진 개수: \(self.personCount)"
+            }
+            
+            assetIds.append(asset.localIdentifier)
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
             }
             
             seg.isPerson = false
@@ -725,5 +768,29 @@ extension ViewController {
     private func clearResults() {
       print("Running inference with TensorFlow Lite...")
     }
+
+}
+
+extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return assetIds.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.cellId, for: indexPath) as? CollectionViewCell else { return UICollectionViewCell() }
+        let assetID = assetIds[indexPath.row]
+        
+        let image = PHAsset.fetchAssets(withLocalIdentifiers: [assetID], options: nil)
+        
+        image.enumerateObjects { asset, _, _ in
+            asset.requestContentEditingInput(with: nil) { image, _ in
+                guard let image = image?.displaySizeImage else { return }
+                cell.configureImage(image: image)
+            }
+        }
+        
+        return cell
+    }
+
 
 }

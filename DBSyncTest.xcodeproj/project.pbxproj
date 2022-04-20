@@ -18,6 +18,7 @@
 		A88783042806CFE900A643F2 /* QueueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88783032806CFE900A643F2 /* QueueModel.swift */; };
 		A88783062806D14E00A643F2 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A88783052806D14E00A643F2 /* RealmManager.swift */; };
 		F555602C280E43F700F94F65 /* SegInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F555602B280E43F700F94F65 /* SegInfo.swift */; };
+		F579E849280E9741000791D8 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F579E848280E9741000791D8 /* CollectionViewCell.swift */; };
 		F5BD66DD280D432C00BEA14D /* labelmap.txt in Resources */ = {isa = PBXBuildFile; fileRef = F5BD66DB280D432C00BEA14D /* labelmap.txt */; };
 		F5BD66DE280D432C00BEA14D /* detect.tflite in Resources */ = {isa = PBXBuildFile; fileRef = F5BD66DC280D432C00BEA14D /* detect.tflite */; };
 		F5BD66E1280D43B200BEA14D /* CVPixelBufferExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5BD66E0280D43B200BEA14D /* CVPixelBufferExtension.swift */; };
@@ -46,7 +47,7 @@
 		A88782E32806C54700A643F2 /* DBSyncTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DBSyncTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A88782E62806C54700A643F2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A88782E82806C54700A643F2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		A88782EA2806C54700A643F2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A88782EA2806C54700A643F2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		A88782ED2806C54700A643F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A88782EF2806C54A00A643F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A88782F22806C54A00A643F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -56,6 +57,7 @@
 		A88783032806CFE900A643F2 /* QueueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueModel.swift; sourceTree = "<group>"; };
 		A88783052806D14E00A643F2 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		F555602B280E43F700F94F65 /* SegInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegInfo.swift; sourceTree = "<group>"; };
+		F579E848280E9741000791D8 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		F5BD66DB280D432C00BEA14D /* labelmap.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = labelmap.txt; path = ../../../examples/lite/examples/object_detection/ios/ObjectDetection/Model/labelmap.txt; sourceTree = "<group>"; };
 		F5BD66DC280D432C00BEA14D /* detect.tflite */ = {isa = PBXFileReference; lastKnownFileType = file; name = detect.tflite; path = ../../../examples/lite/examples/object_detection/ios/ObjectDetection/Model/detect.tflite; sourceTree = "<group>"; };
 		F5BD66E0280D43B200BEA14D /* CVPixelBufferExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CVPixelBufferExtension.swift; path = ../../../examples/lite/examples/object_detection/ios/ObjectDetection/Extensions/CVPixelBufferExtension.swift; sourceTree = "<group>"; };
@@ -128,7 +130,7 @@
 			children = (
 				F5556030280E519100F94F65 /* Queue */,
 				F555602F280E517C00F94F65 /* Management */,
-				F555602E280E517200F94F65 /* TableView */,
+				F555602E280E517200F94F65 /* CollectionView */,
 				F555602D280E515100F94F65 /* ViewController */,
 				F5BD66DF280D43A900BEA14D /* Extension */,
 				F5BD66DA280D432300BEA14D /* Model */,
@@ -150,11 +152,12 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		F555602E280E517200F94F65 /* TableView */ = {
+		F555602E280E517200F94F65 /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				F579E848280E9741000791D8 /* CollectionViewCell.swift */,
 			);
-			path = TableView;
+			path = CollectionView;
 			sourceTree = "<group>";
 		};
 		F555602F280E517C00F94F65 /* Management */ = {
@@ -325,6 +328,7 @@
 				A88782E92806C54700A643F2 /* SceneDelegate.swift in Sources */,
 				F5BD66EF280D5C6700BEA14D /* ImagePredictor.swift in Sources */,
 				F5BD66F3280D5C8900BEA14D /* VNClassificationObservation+confidenceString.swift in Sources */,
+				F579E849280E9741000791D8 /* CollectionViewCell.swift in Sources */,
 				A88783022806CEB100A643F2 /* DataBaseModel.swift in Sources */,
 				A88783002806CB6A00A643F2 /* Queue.swift in Sources */,
 				F5BD66E3280D43DF00BEA14D /* UIColorExtension.swift in Sources */,
@@ -410,7 +414,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -465,7 +469,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -482,8 +486,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZMXTCSPNUZ;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 4NPNDCYSXN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DBSyncTest/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진 권한 가져감";
@@ -497,7 +501,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = storyboard.DBSyncTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -513,8 +517,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZMXTCSPNUZ;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 4NPNDCYSXN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DBSyncTest/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진 권한 가져감";
@@ -528,7 +532,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = storyboard.DBSyncTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -338,7 +338,6 @@ class ImageSegmentator {
         segmentationImagePixels[x * self.outputImageHeight + y] = legendColor
       }
     }
-    print("클래스", classList, indexMax)
     return (segmentationMap, segmentationImagePixels, classList)
   }
 
